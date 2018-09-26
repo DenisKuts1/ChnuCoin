@@ -6,12 +6,13 @@ import java.util.*
 import java.security.spec.X509EncodedKeySpec
 import java.security.KeyFactory
 import java.util.Arrays
+import javax.crypto.Cipher
 
 
-class RSA {
+object RSA {
 
     fun generateKeys(): KeyPair{
-        val keySize = 512
+        val keySize = 2048
         val generator = KeyPairGenerator.getInstance("RSA")
         generator.initialize(keySize)
         return generator.genKeyPair()
@@ -48,5 +49,18 @@ class RSA {
         return factory.generatePublic(spec)
     }
 
+    fun encrypt(privateKey: String, data: String): String{
+        val key = stringToPrivateKey(privateKey)
+        val cipher = Cipher.getInstance("RSA")
+        cipher.init(Cipher.ENCRYPT_MODE, key)
+        return Base64.getEncoder().encodeToString(cipher.doFinal(Base64.getDecoder().decode(data)))
+    }
+
+    fun decrypt(publicKey: String, encryptedData: String): String{
+        val key = stringToPublicKey(publicKey)
+        val cipher = Cipher.getInstance("RSA")
+        cipher.init(Cipher.DECRYPT_MODE, key)
+        return Base64.getEncoder().encodeToString(cipher.doFinal(Base64.getDecoder().decode(encryptedData)))
+    }
 
 }

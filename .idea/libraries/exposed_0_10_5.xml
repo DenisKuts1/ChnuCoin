@@ -1,0 +1,9 @@
+<component name="libraryTable">
+  <library name="exposed-0.10.5">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/exposed-0.10.5.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>

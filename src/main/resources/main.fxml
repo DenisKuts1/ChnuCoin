@@ -36,17 +36,12 @@
             <Font size="14.0" />
          </font>
       </Text>
-      <Text fx:id="amount" layoutX="20.0" layoutY="200.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Amount">
+      <Text fx:id="amount" layoutX="20.0" layoutY="120.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Amount">
          <font>
             <Font size="14.0" />
          </font>
       </Text>
-      <Text layoutX="20.0" layoutY="80.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Public Key:">
-         <font>
-            <Font size="14.0" />
-         </font>
-      </Text>
-      <Text layoutX="20.0" layoutY="140.0" strokeType="OUTSIDE" strokeWidth="0.0" text="E-Wallet:">
+      <Text layoutX="20.0" layoutY="80.0" strokeType="OUTSIDE" strokeWidth="0.0" text="E-Wallet:">
          <font>
             <Font size="14.0" />
          </font>
@@ -54,7 +49,8 @@
       <TextField fx:id="loginWalletField" layoutX="300.0" layoutY="40.0" prefHeight="25.0" prefWidth="250.0" promptText="Login or E-Wallet number" />
       <TextField fx:id="transactionAmount" layoutX="300.0" layoutY="80.0" prefHeight="25.0" prefWidth="250.0" promptText="Amount" />
       <Button layoutX="300.0" layoutY="120.0" mnemonicParsing="false" onAction="#send" prefHeight="25.0" prefWidth="76.0" text="Send" />
-      <Text fx:id="publicKey" layoutX="20.0" layoutY="110.0" strokeType="OUTSIDE" strokeWidth="0.0" text="key" />
-      <Text fx:id="wallet" layoutX="20.0" layoutY="170.0" strokeType="OUTSIDE" strokeWidth="0.0" text="wallet" />
+      <Text fx:id="wallet" layoutX="20.0" layoutY="100.0" strokeType="OUTSIDE" strokeWidth="0.0" text="wallet" />
+      <Button layoutX="19.0" layoutY="133.0" mnemonicParsing="false" onAction="#getPublicKey" text="Public key" />
+      <Button layoutX="19.0" layoutY="167.0" mnemonicParsing="false" onAction="#mine" prefHeight="25.0" prefWidth="70.0" text="Mine" />
    </children>
 </AnchorPane>

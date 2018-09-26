@@ -7,8 +7,6 @@ import java.math.BigDecimal
 
 object DAO {
 
-    private val rsa by lazy { RSA() }
-
     init {
         Database.connect("jdbc:mysql://localhost:3306/chnucoin?useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC", "com.mysql.jdbc.Driver", "root", "")
         transaction {
@@ -26,9 +24,9 @@ object DAO {
     }
 
     fun createUser(login: String, password: String) {
-        val pair = rsa.generateKeys()
-        val private = rsa.privateKeyToString(pair.private)
-        val public = rsa.publicKeyToString(pair.public)
+        val pair = RSA.generateKeys()
+        val private = RSA.privateKeyToString(pair.private)
+        val public = RSA.publicKeyToString(pair.public)
         transaction {
             val newUser = User.new {
                 this.login = login
@@ -58,7 +56,7 @@ object DAO {
         return amount
     }
 
-    fun getUser(login: String, password: String): User? {
+    fun confirmAndGetUser(login: String, password: String): User? {
         var user: User? = null
         var empty = false
         transaction {
@@ -71,6 +69,68 @@ object DAO {
             null
         } else {
             user
+        }
+    }
+
+    fun getUser(login: String): User? {
+        var user: User? = null
+        transaction {
+            user = User.find { Users.login eq login }.firstOrNull()
+        }
+        return user
+    }
+
+    fun getPrivateKey(user: User): String?{
+        var privateKey: String? = null
+        transaction {
+            privateKey = PrivateKey.find { PrivateKeys.user eq user.id }.first().privateKey
+        }
+        return privateKey
+    }
+
+    fun getFirstUnconfirmedTransaction(): Transaction?{
+        var result: Transaction? = null
+        transaction {
+            val transactions = Transaction.find {
+                Transactions.isConfirmed eq false
+            }
+            if (!transactions.empty()){
+                result = transactions.sortedBy { it.time }.first()
+            }
+        }
+        return result
+    }
+
+    fun getLastBlockChain(): BlockChain?{
+        var result: BlockChain? = null
+        transaction {
+            val blockChain = BlockChain.all()
+            if (!blockChain.empty()){
+                result = blockChain.sortedBy { it.time }.last()
+            }
+        }
+        return result
+    }
+    fun getPreviousBlockChain(): BlockChain?{
+        var result: BlockChain? = null
+        transaction {
+            val blockChain = BlockChain.all()
+            if (blockChain.count() > 1){
+                result = blockChain.sortedBy { it.time }.dropLast(1).last()
+            }
+        }
+        return result
+    }
+
+    fun updateWallet(user: User, amount: BigDecimal){
+        transaction {
+            EWallet.find { EWallets.user eq user.id }.first().amount += amount
+        }
+    }
+
+    fun confirmTransaction(transaction: Transaction){
+        transaction {
+            transaction.isConfirmed = true
         }
     }
 }
